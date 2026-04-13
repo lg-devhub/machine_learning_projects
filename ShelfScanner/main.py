@@ -2,23 +2,19 @@ import cv2
 import easyocr
 import requests
 
-# 📸 CAMINHO DA IMAGEM
 imagem_path = "books.jpg"
 
-# 🔍 CARREGAR IMAGEM
 imagem = cv2.imread(imagem_path)
 
 if imagem is None:
-    print("❌ Erro ao carregar a imagem.")
+    print(" Erro ao carregar a imagem.")
     exit()
 
-# 🧠 INICIALIZAR OCR
 reader = easyocr.Reader(['en'])  # pode adicionar 'pt' também
 
-# 🔎 EXTRAIR TEXTO
 resultados = reader.readtext(imagem_path)
 
-print("\n📄 TEXTO EXTRAÍDO:\n")
+print("\n TEXTO EXTRAÍDO:\n")
 
 livros = []
 
@@ -32,12 +28,11 @@ for (bbox, texto, prob) in resultados:
 # remover duplicados
 livros = list(set(livros))
 
-print("\n📚 POSSÍVEIS LIVROS ENCONTRADOS:\n")
+print("\n POSSÍVEIS LIVROS ENCONTRADOS:\n")
 for livro in livros:
     print("-", livro)
 
 
-# 🌐 FUNÇÃO PARA BUSCAR LIVRO
 def buscar_livro(nome):
     url = f"https://www.googleapis.com/books/v1/volumes?q={nome}"
     response = requests.get(url)
@@ -58,19 +53,17 @@ def buscar_livro(nome):
     return None
 
 
-# 🔗 BUSCAR INFORMAÇÕES
-print("\n🔎 RESULTADOS DA BUSCA:\n")
+print("\n RESULTADOS DA BUSCA:\n")
 
 for livro in livros:
     resultado = buscar_livro(livro)
 
     if resultado:
-        print(f"📖 Título: {resultado['titulo']}")
-        print(f"✍️ Autor: {resultado['autor']}")
+        print(f" Título: {resultado['titulo']}")
+        print(f" Autor: {resultado['autor']}")
         print("-" * 40)
 
 
-# 🖥️ MOSTRAR IMAGEM
 cv2.imshow("Imagem", imagem)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
